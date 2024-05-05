@@ -1,9 +1,19 @@
 const express = require("express");
 const cors = require("cors");
+const { createPool } = require("mysql2/promise");
 
 const app = express();
 
+const pool = createPool({
+  host: "mysqldb",
+  user: "root",
+  password: "",
+  port: 3306,
+});
+
 app.use(cors());
+
+pool.on("connection", () => console.log("DB connected!"));
 
 app.get("/", (req, res) => {
   res.json([
@@ -16,6 +26,11 @@ app.get("/", (req, res) => {
       title: "El temor de un hombre sabio",
     },
   ]);
+});
+
+app.get("/dbping", async (req, res) => {
+  const resultPing = await pool.query("SELECT NOW()");
+  res.json(resultPing[0]);
 });
 
 app.listen(4000, () => {
