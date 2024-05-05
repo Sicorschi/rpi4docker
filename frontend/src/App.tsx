@@ -1,24 +1,46 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import axios from "axios";
 
-const baseURL = "http://192.168.0.10:4000/";
+const baseURL = "http://192.168.0.10:4000";
+
+interface ICats {
+  id: number;
+  name: string;
+  owner: string;
+  birth: string;
+}
 
 function App() {
-  const fetchData = async () => {
+  const [cats, setCats] = useState<ICats[]>([]);
+  const fetchDataCats = async () => {
     try {
-      const response = await axios.get(baseURL);
-      console.log(response);
+      const { data } = await axios.get(`${baseURL}/cats`);
+      console.log(data);
+      setCats(data);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    fetchData();
+    fetchDataCats();
   }, []);
 
-  return <>Home dashboard</>;
+  return (
+    <>
+      Home dashboard
+      {cats ? (
+        <div>
+          {cats?.map((c: ICats) => (
+            <span>{c.name}</span>
+          ))}
+        </div>
+      ) : (
+        <span>No cats data</span>
+      )}
+    </>
+  );
 }
 
 export default App;

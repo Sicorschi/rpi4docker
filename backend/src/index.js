@@ -5,10 +5,11 @@ const { createPool } = require("mysql2/promise");
 const app = express();
 
 const pool = createPool({
-  host: "mysqldb",
-  user: "root",
-  password: "",
-  port: 3306,
+  host: "localhost",
+  user: "api",
+  password: "H4ch1r0Ok4",
+  database: "origin_db",
+  port: 3307,
 });
 
 app.use(cors());
@@ -31,6 +32,11 @@ app.get("/", (req, res) => {
 app.get("/dbping", async (req, res) => {
   const resultPing = await pool.query("SELECT NOW()");
   res.json(resultPing[0]);
+});
+
+app.get("/cats", async (req, res) => {
+  const cats = await pool.query("SELECT * FROM cats");
+  res.json(cats[0]);
 });
 
 app.listen(4000, () => {
