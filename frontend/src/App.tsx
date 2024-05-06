@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import axios from "axios";
 
-const baseURL = "http://192.168.0.10:4000";
+const baseURL = `${import.meta.env.VITE_API_URL}:${
+  import.meta.env.VITE_API_PORT
+}`;
 
 interface ICats {
   id: number;

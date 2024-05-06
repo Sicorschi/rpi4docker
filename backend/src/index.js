@@ -1,15 +1,17 @@
 const express = require("express");
 const cors = require("cors");
+const { config } = require("dotenv");
 const { createPool } = require("mysql2/promise");
+config();
 
 const app = express();
 
 const pool = createPool({
-  host: "localhost",
-  user: "api",
-  password: "H4ch1r0Ok4",
-  database: "origin_db",
-  port: 3307,
+  host: "localhost", // process.env.MYSQLDB_HOST,
+  user: "api", // process.env.MYSQLDB_USER,
+  password: "H4ch1r0Ok4", // process.env.MYSQLDB_PASSWORD,
+  database: "origin_db", // process.env.MYSQLDB_DATABASE,
+  port: "3307", // process.env.MYSQLDB_LOCAL_PORT,
 });
 
 app.use(cors());
@@ -39,6 +41,6 @@ app.get("/cats", async (req, res) => {
   res.json(cats[0]);
 });
 
-app.listen(4000, () => {
-  console.log("Server is listening at the port 4000");
+app.listen(process.env.NODE_LOCAL_PORT, () => {
+  console.log(`Server is listening at the port ${process.env.NODE_LOCAL_PORT}`);
 });
